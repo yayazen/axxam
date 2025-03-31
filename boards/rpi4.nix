@@ -1,5 +1,7 @@
 { config, pkgs, ... }:
 {
+  nixpkgs.system = "aarch64-linux";
+  
   fileSystems = {
     "/" = {
       device = "/dev/disk/by-label/nixos";

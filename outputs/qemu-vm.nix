@@ -1,24 +1,21 @@
-{ pkgs }:
+{ pkgs, lib }:
 let
   hostPkgs = pkgs;
 
-  nixos = import "${pkgs.path}/nixos" {
-    system = "aarch64-linux";
-    configuration =
-      { modulesPath, ... }:
-      {
-        imports = [
-          "${modulesPath}/virtualisation/qemu-vm.nix"
-          <board>
-        ] ++ (import ../modules/module-list.nix);
+  nixos = lib.helpers.evalNixOS (
+    { modulesPath, ... }:
+    {
+      imports = [
+        "${modulesPath}/virtualisation/qemu-vm.nix"
+      ];
 
-        virtualisation.graphics = false;
+      virtualisation.graphics = false;
 
-        virtualisation.host.pkgs = hostPkgs;
+      virtualisation.host.pkgs = hostPkgs;
 
-        meta.buildDocsInSandbox = false;
-      };
-  };
+      meta.buildDocsInSandbox = false;
+    }
+  );
 in
 nixos.config.system.build.vm
 // {
